@@ -1,5 +1,9 @@
 # Convert a vcf file to eigenstrat format
 # removes multi-alleleic and indel sites. 
+# usage: python vcf2eigenstrat.py -v vcf_file.vcf(.gz) -o out_root
+# will generate out_root.[snp,ind,geno].
+# removed multiallelic sites and indels
+# Deals with haploid cases including mixed haploid/diplod like X as well. 
 
 from __future__ import division
 import gzip, sys, getopt, pdb
