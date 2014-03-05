@@ -103,13 +103,13 @@ def decode_gt_string(gt_string):
             return "9"
     elif len(gt)==3:
         if gt[0]=="0" and gt[2]=="0":
-            return "0"
+            return "2"
         if gt[0]=="0" and gt[2]=="1":
             return "1"
         if gt[0]=="1" and gt[2]=="0":
             return "1"
         if gt[0]=="1" and gt[2]=="1":
-            return "2"
+            return "0"
         else:
             return "9"
 
