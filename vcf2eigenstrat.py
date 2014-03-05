@@ -91,14 +91,14 @@ def main(options):
 
 def decode_gt_string(gt_string):
     """
-    Tries to work out the genotype from a vcf genotype entry. 9 for missing
+    Tries to work out the genotype from a vcf genotype entry. 9 for missing [or not in {0,1,2}]
     """
     gt=gt_string.split(":")[0]
     if len(gt)==1:
         if gt=="0":                       # haploid
-            return "0"
-        elif gt=="1":
             return "1"
+        elif gt=="1":
+            return "0"
         else:
             return "9"
     elif len(gt)==3:
