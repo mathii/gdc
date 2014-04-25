@@ -63,7 +63,7 @@ def load_from_arp(arp):
     gt_data={}
     for line in arp_file: 
         if line.startswith("#Number of independent chromosomes"):
-            N_chr=int(line[-2])
+            N_chr=int(line.split()[-1])
         if line.startswith("#Total number of polymorphic sites"):
             N_sites=int(line.split()[-1])
         if "polymorphic positions on chromosome" in line:
