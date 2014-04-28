@@ -94,9 +94,10 @@ def load_from_arp(arp):
             arp_file.next()               # "SampleData= {" line
             for i in range(ssize):
                 line=arp_file.next()
-                if len(line.split())!=N_sites:
+                gt_string=line.split()[2]
+                if len(gt_string)!=N_sites:
                     raise Exception("Wrong number of sites")
-                gt[:,i]=[int(int(x)>0) for x in line.split()[2]]   # converting {1,2,3}->1
+                gt[:,i]=[int(int(x)>0) for x in gt_string]   # converting {1,2,3}->1
             gt_data[sname]={"size":ssize, "gt":gt}
 
     if not N_chr==len(site_data):
