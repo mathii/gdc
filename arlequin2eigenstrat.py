@@ -1,5 +1,8 @@
 # Convert an arelequin .arp file to eigenstrat format
-# Generate .arp file using fastsimcoal2 -s0 option 
+# Generate .arp file using fastsimcoal2 -s0 option
+# Only DNA sequence suppoerted (with -s0), but
+# multiple populations/chromosomes are allowed.
+# Ascertained data automatically detected. 
 # usage: python arelequin2eigenstrat.py -a arp_file.arp(.gz) -o out_root [other options]
 # will generate out_root.[snp,ind,geno].
 # By default will convert to genotype data, so use the -p option if you
@@ -56,23 +59,35 @@ def load_from_arp(arp):
     """
     arp_file=open2(arp)
 
-    ec={} 
-    N_chr=-1                                # data for error checking. 
+    N_chr=-1                                
     N_sites=-1
     site_data=[]
     gt_data={}
+    ascertained=False                   
     for line in arp_file: 
         if line.startswith("#Number of independent chromosomes"):
             N_chr=int(line.split()[-1])
-        if line.startswith("#Total number of polymorphic sites"):
+        if line.startswith("#Total number of polymorphic sites") and not ascertained:
             N_sites=int(line.split()[-1])
-        if "polymorphic positions on chromosome" in line:
+        if line.startswith("#ASCERTAINED DATA"):
+            ascertained=True
+            N_sites=-1
+        if line.startswith("#Number of polym. sites meeting ascertainment criterion:"):
+            N_sites=int(line.split()[-1])
+        if "polymorphic positions on chromosome" in line and not ascertained:
             npos=int(line.split()[1])
             chrom=int(line.split()[-1])
             line=next(arp_file)
             site_data.append(None)
             site_data[chrom-1]=[int(x.replace(",", "")) for x in line[1:].split()]
-            ec[chrom]=npos
+        if "polymorphic positions on chromosome" in line and ascertained:
+            if not line.startswith("#Ascertained"):
+                raise Exception("Line not ascertained")
+            chrom=int(line.split()[-1])
+            line=next(arp_file)
+            npos=len(line.split())
+            site_data.append(None)
+            site_data[chrom-1]=[int(x.replace(",", "")) for x in line[1:].split()]
         if "SampleName=" in line:
             sname=line.split("\"")[-2]
             line=arp_file.next()
@@ -81,6 +96,8 @@ def load_from_arp(arp):
             arp_file.next()               # "SampleData= {" line
             for i in range(ssize):
                 line=arp_file.next()
+                if len(line.split)!=N_sites:
+                    raise Exception("Wrong number of sites")
                 gt[:,i]=[int(int(x)>0) for x in line.split()[2]]   # converting {1,2,3}->1
             gt_data[sname]={"size":ssize, "gt":gt}
 
