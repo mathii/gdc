@@ -80,9 +80,7 @@ def load_from_arp(arp):
             line=next(arp_file)
             site_data.append(None)
             site_data[chrom-1]=[int(x.replace(",", "")) for x in line[1:].split()]
-        if "polymorphic positions on chromosome" in line and ascertained:
-            if not line.startswith("#Ascertained"):
-                raise Exception("Line not ascertained")
+        if line.startswith("#Ascertained polymorphic positions on chromosome") and ascertained:
             chrom=int(line.split()[-1])
             line=next(arp_file)
             npos=len(line.split())
