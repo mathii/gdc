@@ -9,7 +9,7 @@
 # want to keep it unphased. 
 
 from __future__ import division
-import gzip, sys, getopt, pdb
+import gzip, sys, getopt, gdc, pdb
 import numpy as np
 
 ################################################################################
@@ -39,17 +39,6 @@ def parse_options():
 
 ################################################################################
 
-def open2(file, mode="r"):
-	"""
-	Open a file, or a gzipped file if it ends in .gz
-	"""
-	if file[-3:]==".gz":
-		return gzip.open(file, mode)
-	else:
-		return open(file, mode)
-
-################################################################################
-
 def load_from_arp(arp):
     """
     Parse an arp file into an internal format, returning site data, which is a 
@@ -57,7 +46,7 @@ def load_from_arp(arp):
     dict with infomation on the samples and genotypes. 
     I'm really just guessing what the structure of the file is.
     """
-    arp_file=open2(arp)
+    arp_file=gdc.open2(arp)
 
     N_chr=-1                                
     N_sites=-1

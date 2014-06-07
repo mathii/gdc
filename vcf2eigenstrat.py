@@ -6,7 +6,7 @@
 # Deals with haploid cases including mixed haploid/diplod like X as well. 
 
 from __future__ import division
-import gzip, sys, getopt, pdb
+import sys, getopt, gdc, pdb
 
 ################################################################################
 
@@ -34,22 +34,11 @@ def parse_options():
 
 ################################################################################
 
-def open2(file, mode="r"):
-	"""
-	Open a file, or a gzipped file if it ends in .gz
-	"""
-	if file[-3:]==".gz":
-		return gzip.open(file, mode)
-	else:
-		return open(file, mode)
-
-################################################################################
-
 def main(options):
     """
     Convert vcf to eigenstrat format (ind, snp and geno files)
     """
-    vcf=open2(options["vcf"])
+    vcf=gdc.open2(options["vcf"])
     snp, ind, geno = [open(options["out"]+x, "w") for x in [".snp", ".ind", ".geno"]]
     removed={"multiallelic":0, "indel":0}
     count=0
