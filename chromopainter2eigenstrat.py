@@ -79,7 +79,7 @@ def main(options):
 
         snp.write("\t".join([chr+":"+pos, chr, "0.0", pos, alleles[0], alleles[1]])+"\n")
         for i in range(total_individuals):
-            this_gt=sum([g==alleles[0] for g in gts[(i*2):(i*2+1)]])
+            this_gt=sum([g==alleles[0] for g in gts[(i*2):(i*2+2)]])
             geno.write(str(this_gt))
         geno.write("\n")
 
