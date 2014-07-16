@@ -82,7 +82,7 @@ def main(options):
     except IOError:
         hap_file=open(options["shapeit"]+".haps", "r")
 
-            chr=np.genfromtxt(hap_file, dtype=str, usecols=0)
+        chr=np.genfromtxt(hap_file, dtype=str, usecols=0)
     hap_file.seek(0)
     pos=np.genfromtxt(hap_file, dtype=int, usecols=2)
     hap_file.seek(0)
