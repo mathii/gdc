@@ -155,7 +155,7 @@ def main(options):
         output_msmc(haps, chr, pos, alleles, options)
 
     if options["psmc"]:
-        output_psmc(haps, chr, pos, options)
+        output_psmc(haps, chr[0], pos, options)   #Assumes all on the same chromosome
             
 ################################################################################
 
