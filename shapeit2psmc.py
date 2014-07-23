@@ -103,12 +103,14 @@ def output_psmc(haps, chr, pos, options):
 
     out.write(">chr"+str(chr))
     
-    this_block=0
     het_pos_iter=enumerate(het_pos)
     next_het_site,next_het_pos=het_pos_iter.next()
-    
+    # Start at the first het block. It's not the best thing to do,
+    # but it's probably better than starting at 0.
+    this_block=first_block=int(pos[0]/100)
+
     while True:
-        if not this_block % 60:
+        if not this_block-first_block % 60:
             out.write("\n")
         if next_het_pos > this_block*100+100:
             out.write("A")
