@@ -110,7 +110,7 @@ def output_psmc(haps, chr, pos, options):
     this_block=first_block=int(pos[0]/100)
 
     while True:
-        if not this_block-first_block % 60:
+        if not (this_block-first_block) % 60:
             out.write("\n")
         if next_het_pos > this_block*100+100:
             out.write("A")
