@@ -86,7 +86,7 @@ def output_msmc(haps, chr, pos, alleles, options):
 
 ################################################################################
 
-def output_psmc(haps, pos, options):
+def output_psmc(haps, chr, pos, options):
     """
     output a .psmc file. Assuming there are 2 or 4 haplotypes. If there
     are 4 then we use 0 and 2, assuming that (01) is one individual and (23)
@@ -100,11 +100,16 @@ def output_psmc(haps, pos, options):
     het_pos=pos[used_haps[:,0]!=used_haps[:,1]]
         
     out=open(options["out"]+".psmc", "w")
+
+    out.write(">chr"+str(chr))
+    
     this_block=0
     het_pos_iter=enumerate(het_pos)
     next_het_site,next_het_pos=het_pos_iter.next()
     
     while True:
+        if not this_block % 60:
+            out.write("\n")
         if next_het_pos > this_block*100+100:
             out.write("A")
         else:
@@ -150,7 +155,7 @@ def main(options):
         output_msmc(haps, chr, pos, alleles, options)
 
     if options["psmc"]:
-        output_psmc(haps, pos, options)
+        output_psmc(haps, chr, pos, options)
             
 ################################################################################
 
