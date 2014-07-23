@@ -15,7 +15,7 @@ def parse_options():
     out: root for .msmc output
     individuals: either 2 or 4 samples from the sample file. 
     """
-    options ={ "shapeit":None, "out":"out", "individuals":[], "psmc":False, "msmc": "False" }
+    options ={ "shapeit":None, "out":"out", "individuals":[], "psmc":False, "msmc": False }
 	
     try:
         opts, args = getopt.getopt(sys.argv[1:], "s:o:i:pm", ["shapeit", "out", "individuals", "psmc", "msmc"])
