@@ -94,7 +94,7 @@ def output_psmc(haps, chr, pos, options):
     """
 
     used_haps=haps
-    if haps.shape[1]==2:
+    if haps.shape[1]==4:
         used_haps=haps[:,[0,2]]
 
     het_pos=pos[used_haps[:,0]!=used_haps[:,1]]
