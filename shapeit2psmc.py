@@ -68,62 +68,6 @@ def index_to_index(index):
     else:
         raise Exception("Must be either 1, 2 or 4 individuals")
 
-################################################################################
-
-def output_msmc(haps, chr, pos, alleles, options):
-    """
-    output a .msmc file. Assuming that there are 4 haplotypes
-    """
-    out=open(options["out"]+".msmc", "w")
-    last_site=0
-    for i in range(haps.shape[0]):
-        if sum(haps[i,:]) not in [0,4] and pos[i]>last_site:
-            this=alleles[i,:][haps[i,:]]
-            out.write("%s\t%d\t%d\t%s\n"%(chr[i], pos[i], pos[i]-last_site, "".join(this)))
-            last_site=pos[i]
-
-    out.close()
-
-################################################################################
-
-def output_psmc(haps, chr, pos, options):
-    """
-    output a .psmc file. Assuming there are 2 or 4 haplotypes. If there
-    are 4 then we use 0 and 2, assuming that (01) is one individual and (23)
-    is another
-    """
-
-    used_haps=haps
-    if haps.shape[1]==4:
-        used_haps=haps[:,[0,2]]
-
-    het_pos=pos[used_haps[:,0]!=used_haps[:,1]]
-        
-    out=open(options["out"]+".psmc", "w")
-
-    out.write(">chr"+str(chr))
-    
-    het_pos_iter=enumerate(het_pos)
-    next_het_site,next_het_pos=het_pos_iter.next()
-    # Start at the first het block. It's not the best thing to do,
-    # but it's probably better than starting at 0.
-    this_block=first_block=int(pos[0]/100)
-
-    while True:
-        if not (this_block-first_block) % 60:
-            out.write("\n")
-        if next_het_pos > this_block*100+100:
-            out.write("A")
-        else:
-            out.write("W")
-            while next_het_pos <= this_block*100+100:   #Find the next het site after this block
-                try:
-                    next_het_site,next_het_pos=het_pos_iter.next()
-                except StopIteration:
-                    out.close()
-                    return                
-        this_block+=1
-
     
 ################################################################################
 
@@ -154,10 +98,10 @@ def main(options):
     haps=np.genfromtxt(hap_file, dtype=int, usecols=5+index)
 
     if options["msmc"]:
-        output_msmc(haps, chr, pos, alleles, options)
+        gdc.output_msmc(haps, chr, pos, alleles, options)
 
     if options["psmc"]:
-        output_psmc(haps, chr[0], pos, options)   #Assumes all on the same chromosome
+        gdc.output_psmc(haps, chr[0], pos, options)   #Assumes all on the same chromosome
             
 ################################################################################
 
