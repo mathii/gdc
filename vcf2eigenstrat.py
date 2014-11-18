@@ -14,10 +14,10 @@ def parse_options():
     """
     Options are described by the help() function
     """
-    options ={ "vcf":None, "out":"out"  }
+    options ={ "vcf":None, "out":"out", "ref":None  }
 	
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "v:o:", ["vcf", "out"])
+        opts, args = getopt.getopt(sys.argv[1:], "v:o:r:", ["vcf", "out", "ref"])
         print opts, args
     except Exception as err:
         print str(err)
@@ -26,6 +26,7 @@ def parse_options():
     for o, a in opts:
         print o,a
         if o in ["-v","--vcf"]:         options["vcf"] = a
+        if o in ["-r","--ref"]:         options["ref"] = a
         elif o in ["-o","--out"]:       options["out"] = a
 
     print "found options:"
@@ -48,6 +49,8 @@ def main(options):
             next
         elif line[:6]=="#CHROM":			  # Header line
             inds=line.split()[9:]
+            if options["ref"]:
+                ind.write(options["ref"]+"\tU\tREF\n")
             for indi in inds:
                 ind.write(indi+"\tU\tPOP\n")
         else:							  # data
@@ -63,6 +66,8 @@ def main(options):
                     bits[2]=bits[0]+":"+bits[1]
                 snp.write("    ".join([bits[2], bits[0], "0.0", bits[1], bits[3], bits[4]])+"\n")
                 geno_string=""
+                if options["ref"]:
+                    geno_string="2"
                 for gt in bits[9:]:
                     geno_string+=decode_gt_string(gt)
                 geno.write(geno_string+"\n")
