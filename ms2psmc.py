@@ -15,7 +15,7 @@ def parse_options():
     out: root for .msmc output
     individuals: either 2 or 4 samples from the sample file. 
     """
-    options ={ "input":None, "out":None, "switch_rate":0,  "flip_rate":0, "chr":0, "msmc":False, "psmc":False ,"macs":False, length:None}
+    options ={ "input":None, "out":None, "switch_rate":0,  "flip_rate":0, "chr":0, "msmc":False, "psmc":False ,"macs":False, "length":None}
 	
     try:
         opts, args = getopt.getopt(sys.argv[1:], "i:o:s:f:c:l:mpa", ["ms", "out", "switch_rate", "flip_rate", "chr", "msmc", "psmc", "macs"])
