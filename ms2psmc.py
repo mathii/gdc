@@ -79,7 +79,8 @@ def read_ms(ms_file, options):
     ms=gdc.open2(ms_file)
     if options["length"]:
         length=options["length"]           
-    
+
+    nhap=length=None
     line=ms.next()
     if options["macs"]:
         nhap, length = [int(x) for x in line.split()[1:3]]
