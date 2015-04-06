@@ -14,10 +14,10 @@ def parse_options():
     """
     Options are described by the help() function
     """
-    options ={ "vcf":None, "out":"out", "ref":None  }
+    options ={ "vcf":None, "out":"out", "ref":None, "indAsPop":False  }
 	
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "v:o:r:", ["vcf", "out", "ref"])
+        opts, args = getopt.getopt(sys.argv[1:], "v:o:r:", ["vcf", "out", "ref", "indAsPop"])
         print opts, args
     except Exception as err:
         print str(err)
@@ -27,6 +27,7 @@ def parse_options():
         print o,a
         if o in ["-v","--vcf"]:         options["vcf"] = a
         if o in ["-r","--ref"]:         options["ref"] = a
+        if o in ["--indAsPop"]:         options["indAsPop"] = True
         elif o in ["-o","--out"]:       options["out"] = a
 
     print "found options:"
@@ -52,7 +53,11 @@ def main(options):
             if options["ref"]:
                 ind.write(options["ref"]+"\tU\tREF\n")
             for indi in inds:
-                ind.write(indi+"\tU\tPOP\n")
+                if not options["indAsPOP"]:
+                    ind.write(indi+"\tU\tPOP\n")
+                else:
+                    ind.write(indi+"\tU\t"+indi+"\n")
+                   
         else:							  # data
             bits=line.split()
             if "," in bits[4]:
