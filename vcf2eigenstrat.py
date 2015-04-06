@@ -53,7 +53,7 @@ def main(options):
             if options["ref"]:
                 ind.write(options["ref"]+"\tU\tREF\n")
             for indi in inds:
-                if not options["indAsPOP"]:
+                if not options["indAsPop"]:
                     ind.write(indi+"\tU\tPOP\n")
                 else:
                     ind.write(indi+"\tU\t"+indi+"\n")
