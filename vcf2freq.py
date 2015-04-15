@@ -69,11 +69,12 @@ def main(options):
                         totals[map[samples[i-9]]]+=1
             
             freqs=[0.0]*len(pops)
-            for i,pop in enumerate(pops):
-                freqs[i]=counts[pop]/totals[pop]
-            
-            print("\t".join(first_cols+[format(x, "1.4f") for x in freqs]))
-            
+            try:
+                for i,pop in enumerate(pops):
+                    freqs[i]=counts[pop]/totals[pop]
+                print("\t".join(first_cols+[format(x, "1.4f") for x in freqs]))
+            except ZeroDivisionError:
+                continue
     
 ################################################################################
 
