@@ -1,5 +1,7 @@
 #eigenstrat (packed or unpacked) to vcf
 #Writes to stdout, unlike many of these scripts. 
+#Usage: python eigenstrat2vcf.py -i root 
+#Data files are root.snp, root.ind and root.geno
 
 from __future__ import division, print_function
 import argparse, gdc, pyEigenstrat
