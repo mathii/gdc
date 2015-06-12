@@ -95,7 +95,7 @@ def decode_gt_string(gt_string):
     gt=gt_string.split(":")[0]
     if len(gt)==1:
         if gt=="0":                       # haploid
-            return "1"
+            return "2"
         elif gt=="1":
             return "0"
         else:
