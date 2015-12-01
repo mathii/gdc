@@ -34,7 +34,7 @@ def main(options):
     if(options.ind):
         inds== [x[:-1] for x in open(options.ind) if x[:-1]]
 
-    data=pyEigenstrat.load(options.root, ind=inds)
+    data=pyEigenstrat.load(options.root, inds=inds)
 
     #Write header. 
     print("##fileformat=VCFv4.0")
