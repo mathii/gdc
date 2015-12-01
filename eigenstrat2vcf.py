@@ -16,8 +16,10 @@ def parse_options():
     argparse
     """
     parser=argparse.ArgumentParser()
-    parser.add_argument('-i', '--input', type=str, default="", help=
+    parser.add_argument('-r', '--root', type=str, default="", help=
                         "Root for eigenstrat files - i.e {root.snp, root.geno, root.ind}")
+    parser.add_argument('-i', '--ind', type=str, default="", help=
+                        "individual samples to include")
 
     return parser.parse_args()
 
@@ -28,7 +30,11 @@ def main(options):
     Convert
     """
 
-    data=pyEigenstrat.load(options.input)
+    inds=[]
+    if(options.ind):
+        inds== [x[:-1] for x in open(options.ind) if x[:-1]]
+
+    data=pyEigenstrat.load(options.root, ind=inds)
 
     #Write header. 
     print("##fileformat=VCFv4.0")
