@@ -36,11 +36,11 @@ def main(options):
 
     inds=pops=snps=[]
     if(options.inds):
-        inds== [x[:-1] for x in open(options.inds) if x[:-1]]
+        inds=[x[:-1] for x in open(options.inds) if x[:-1]]
     if(options.pops):
-        pops== [x[:-1] for x in open(options.pops) if x[:-1]]
+        pops=[x[:-1] for x in open(options.pops) if x[:-1]]
     if(options.snps):
-        snps== [x[:-1] for x in open(options.snps) if x[:-1]]
+        snps=[x[:-1] for x in open(options.snps) if x[:-1]]
 
     data=pyEigenstrat.load(options.root, inds=inds, pops=pops, snps=snps)
 
