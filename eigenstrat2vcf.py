@@ -34,7 +34,7 @@ def main(options):
     Convert
     """
 
-    inds=pops=snps=[]
+    inds=pops=snps=None
     if(options.inds):
         inds=[x[:-1] for x in open(options.inds) if x[:-1]]
     if(options.pops):
