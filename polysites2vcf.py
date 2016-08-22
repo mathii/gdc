@@ -30,6 +30,7 @@ def parse_options():
     """
     parser=argparse.ArgumentParser()
     parser.add_argument('-i', '--input', type=argparse.FileType('r'), default="-")
+    parser.add_argument('-c', '--chrom', type=str, default="")
 
     return parser.parse_args()
 
@@ -53,13 +54,15 @@ def main(options):
                 continue
             elif bits[1]!="..":
                 continue
-            elif bits[2][0]=="4" and include_refs:
+            elif bits[2][0]=="3" and include_refs: #Refs
+                samples.append(bits[3])
+            elif bits[2][0]=="4": #C team
                 samples.append(bits[7])
-            elif bits[2][0]=="4":
+            elif bits[2][0]=="5": #B team with cteam processing
                 samples.append(bits[7])
-            elif bits[2][0]=="7" and include_ancients:
+            elif bits[2][0]=="7" and include_ancients: #Ancients
                 samples.append(bits[4].split(":")[0])
-            elif bits[2][0]=="8":
+            elif bits[2][0]=="8": #A/B team, original
                 samples.append(bits[4].split(":")[0])
         elif line[0]=="#" and reading_header:
             reading_header=False
@@ -70,6 +73,10 @@ def main(options):
         elif not reading_header:
             bits=line.split()
             chrom=bits[0]
+
+            if options.chrom and options.chrom!=chrom:
+                continue
+
             poss=bits[1]
             idd=chrom+"_"+poss
             ref=bits[2][0]
