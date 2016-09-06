@@ -4,6 +4,7 @@
 # will generate out_root.[snp,ind,geno].
 # removed multiallelic sites and indels
 # Deals with haploid cases including mixed haploid/diplod like X as well. 
+# -i option is a .ind file to get population names and sex. 
 
 from __future__ import division
 import sys, getopt, gdc, pdb
@@ -14,10 +15,10 @@ def parse_options():
     """
     Options are described by the help() function
     """
-    options ={ "vcf":None, "out":"out", "ref":None, "indAsPop":False  }
+    options ={ "vcf":None, "out":"out", "ref":None, "indAsPop":False, "indmap":None  }
 	
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "v:o:r:", ["vcf", "out", "ref", "indAsPop"])
+        opts, args = getopt.getopt(sys.argv[1:], "v:o:r:i:", ["vcf", "out", "ref", "indmap", "indAsPop"])
         print opts, args
     except Exception as err:
         print str(err)
@@ -27,6 +28,7 @@ def parse_options():
         print o,a
         if o in ["-v","--vcf"]:         options["vcf"] = a
         if o in ["-r","--ref"]:         options["ref"] = a
+        if o in ["-i","--ind"]:         options["indmap"] = a
         if o in ["--indAsPop"]:         options["indAsPop"] = True
         elif o in ["-o","--out"]:       options["out"] = a
 
@@ -45,6 +47,16 @@ def main(options):
     removed={"multiallelic":0, "indel":0}
     count=0
     
+    if options["indmap"]:
+        pop_map={}
+        sex_map={}
+        ind_map_file=open(options["indmap"], "r")
+        for line in ind_map_file:
+            bits=line[:-1].split()
+            pop_map[bits[0]]=bits[2]
+            sex_map[bits[0]]=bits[1]
+        ind_map_file.close()
+    
     for line in vcf:
         if line[:2]=="##":				  # Comment line
             next
@@ -52,11 +64,16 @@ def main(options):
             inds=line.split()[9:]
             if options["ref"]:
                 ind.write(options["ref"]+"\tU\tREF\n")
-            for indi in inds:
-                if not options["indAsPop"]:
-                    ind.write(indi+"\tU\tPOP\n")
-                else:
+            
+            if options["indmap"]:
+                for indi in inds:
+                    ind.write(indi+"\t"+sex_map.get(indi, "U")+"\t"+pop_map.get(indi, "POP")+"\n")
+            elif options["indAsPop"]:
+                for indi in inds:
                     ind.write(indi+"\tU\t"+indi+"\n")
+            else:
+                for indi in inds:
+                    ind.write(indi+"\tU\tPOP\n")
                    
         else:							  # data
             bits=line.split()
