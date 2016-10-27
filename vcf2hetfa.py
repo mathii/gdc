@@ -22,26 +22,26 @@ def parse_options():
 	
     try:
         opts, args = getopt.getopt(sys.argv[1:], "v:o:r:s:c:m:a:h", 
-                                   ["vcf", "out", "ref", "sample", "chrom", "haplotypes", "mask", "mask_value"])
+                                   ["vcf", "out", "ref", "sample", "chrom", "mask", "mask_value", "haplotypes"])
     except Exception as err:
         print(str(err), file=sys.stderr)
         sys.exit()
 
     for o, a in opts:
         if o in ["-v","--vcf"]:         options["vcf"] = a
-        if o in ["-r","--ref"]:         options["ref"] = a
-        if o in ["-s","--sample"]:      options["sample"] = a
-        if o in ["-c","--chrom"]:       options["chrom"] = a
-        if o in ["-m","--mask"]:        options["mask"] = a
-        if o in ["-a","--mask_value"]:  options["mask_value"] = int(a)
-        if o in ["-h","--haplotypes"]:  options["haplotypes"] = True
+        elif o in ["-r","--ref"]:         options["ref"] = a
+        elif o in ["-s","--sample"]:      options["sample"] = a
+        elif o in ["-c","--chrom"]:       options["chrom"] = a
+        elif o in ["-m","--mask"]:        options["mask"] = a
+        elif o in ["-a","--mask_value"]:  options["mask_value"] = int(a)
+        elif o in ["-h","--haplotypes"]:  options["haplotypes"] = True
         elif o in ["-o","--out"]:       options["out"] = a
         
-        if bool(options["mask"])!=bool(options["mask_value"]):
-            raise Exception("Must specify both mask and mask_value") 
+    if bool(options["mask"])!=bool(options["mask_value"]):
+        raise Exception("Must specify both mask and mask_value") 
         
-        if options["haplotypes"] and not options["out"]:
-            raise Exception("Must specify output file if using haplotypes")
+    if options["haplotypes"] and not options["out"]:
+        raise Exception("Must specify output file if using haplotypes")
         
     print("found options:", file=sys.stderr)
     print(options, file=sys.stderr) 
