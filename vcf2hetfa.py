@@ -51,14 +51,26 @@ def parse_options():
 
 def get_ref_seq(options, ref_fa, mask, last_pos, pos):
     """
-    Extract and mask the reference sequence. 
+    Extract and mask the reference sequence. Replace masked regions with N
     """
     ref_seq=ref_fa[options["chrom"]][last_pos:(pos-1)].seq
     if mask:
         mask_seq=mask[options["chrom"]][last_pos:(pos-1)].seq
-        ref_seq="".join([x if int(y) >= options["mask_value"] else "N" for x,y in zip(ref_seq, mask_seq)])
+        ref_seq="".join([x if y!="N" and int(y) >= options["mask_value"] else "N" for x,y in zip(ref_seq, mask_seq)])
     return ref_seq
 
+################################################################################                                                                             
+
+def check_mask(mask, options, pos):
+    """
+    Check the mask for a single postion. Return True if masked and False if ok. 
+    """
+    masked=False
+    mask_chr=mask[options["chrom"]][pos-1].seq
+    if mask and mask_chr!="N" and int(mask_chr) < options["mask_value"]:
+        masked=True
+    return masked
+        
 ################################################################################
 
 def output_fastas(options):
@@ -94,9 +106,10 @@ def output_fastas(options):
             ref=bits[3]
             alt=bits[4]
 
+            masked=check_mask(mask, options, pos)
             ref_seq=get_ref_seq(options, ref_fa, mask, last_pos, pos)
             
-            if len(ref)==1 and len(alt)==1 and gt in ["0|0", "1|0", "0|1", "1|1"]: #This is a phased biallelic site
+            if len(ref)==1 and len(alt)==1 and gt in ["0|0", "1|0", "0|1", "1|1"] and not masked: #This is a phased biallelic site
                 #This is the sequence from the last position to the base before the current position (note that pos is 1-based)
                 if options["refcheck"] and ref_fa[options["chrom"]][pos-1].seq!=ref:
                     raise Exception("Reference mismatch at pos "+str(pos))
@@ -165,10 +178,7 @@ def output_hetfa(options):
             ref=bits[3]
             alt=bits[4]
 
-            masked=False
-            if mask and int(mask[options["chrom"]][pos-1].seq) < options["mask_value"]:
-                masked=True
-
+            masked=check_mask(mask, options, pos)
             ref_seq=get_ref_seq(options, ref_fa, mask, last_pos, pos)
             
             if len(ref)==1 and len(alt)==1 and gt[0] in ["0","1"] and gt[2] in ["0","1"] and not masked: #This is a biallelic site
