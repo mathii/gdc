@@ -66,9 +66,11 @@ def check_mask(mask, options, pos):
     Check the mask for a single postion. Return True if masked and False if ok. 
     """
     masked=False
-    mask_chr=mask[options["chrom"]][pos-1].seq
-    if mask and mask_chr!="N" and int(mask_chr) < options["mask_value"]:
-        masked=True
+    
+    if mask:
+        mask_chr=mask[options["chrom"]][pos-1].seq
+        if mask_chr!="N" and int(mask_chr) < options["mask_value"]:
+            masked=True
     return masked
         
 ################################################################################
