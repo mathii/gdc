@@ -70,13 +70,13 @@ class bamcollection:
         bases=[]
         for bf in self.bamfiles:
             base=[]
-            for pileupcolumn in bf.pileup( chrom, pos-1, pos):
-                for pileupread in pileupcolumn.pileups: 
-                    if pileupcolumn.pos == pos-1:
-                        bq=pileupread.alignment.query_qualities[pileupread.query_position]>self.min_base_qual
-                        mq=pileupread.alignment.mapq>self.min_map_qual
+            for pupcol in bf.pileup( chrom, pos-1, pos):
+                for pupread in pupcol.pileups: 
+                    if pupcol.pos == pos-1 and pupread.query_position !=None:
+                        bq=pupread.alignment.query_qualities[pupread.query_position]>self.min_base_qual
+                        mq=pupread.alignment.mapq>self.min_map_qual
                         if bq and mq:
-                            base.append(pileupread.alignment.query_sequence[pileupread.query_position])
+                            base.append(pupread.alignment.query_sequence[pupread.query_position])
             bases.append("".join(base))
         return(bases)
 
