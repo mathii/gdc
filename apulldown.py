@@ -208,7 +208,7 @@ def print_vcf_header(bams, options):
         print("##Argument=<"+k+"="+str(v)+">")
     print("##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Genotype\">")
     if  options.gl:
-        print("##FORMAT=<ID=GL,Number=3,Type=Float,Description=\"Genotype likelihoods\">")
+        print("##FORMAT=<ID=GL,Number=G,Type=Float,Description=\"Genotype likelihoods\">")
     print("##FORMAT=<ID=AD,Number=2,Type=Integer,Description=\"Allele depth\">")
     print("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t"+"\t".join(bams.sample_names))
 
