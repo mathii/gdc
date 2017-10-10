@@ -1,5 +1,6 @@
 #Ancient DNA pulldown - pulldown from bam into pseudo-haploid data in vcf format, or readcount output
-#Python3... 
+#Python3..
+#Usage: python apulldown.py -b bamlist -s snps[.snp][.vcf][.vcf.gz] 
 
 from __future__ import division, print_function
 import argparse, gdc, pysam, random, pdb
