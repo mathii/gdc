@@ -102,7 +102,7 @@ class snplist:
             
             #Iterate through to get to the first data line
             line=next(self.data)
-            while line[0]!="#CHROM":
+            while line.decode()[:6]!="#CHROM":
                 line=next(self.data)
         else:
             print(file[-3:])
@@ -116,12 +116,16 @@ class snplist:
         Iterate over snp file:
         """
         line=next(self.data)
+        if isinstance(line, bytes):
+            line=line.decode()
         bits=line.split()
         if self.is_snp:
             return (bits[1], int(bits[3]), bits[0], bits[4], bits[5])
         elif self.is_vcf:
             while len(bits[3])!=1 or len(bits[4])!=1:
-                line=self.data.next()
+                line=next(self.data)
+                if isinstance(line, bytes):
+                    line=line.decode()
                 bits=line.split()
             return (bits[0], int(bits[1]), bits[2], bits[3], bits[4])
             
