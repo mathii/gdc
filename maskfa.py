@@ -43,7 +43,6 @@ def main(options):
         print("Masking chromosome "+chrom, file=sys.stderr)
         faseq=fa[chrom][:].seq
         maskseq=mask[chrom][:].seq
-        pdb.set_trace()
         new_seq="".join([x if y.isdigit() and int(y)>=options.level else "N" for x,y in zip(faseq,maskseq)])
         print("Printing chromosome "+chrom, file=sys.stderr)
         print(">"+chrom)
