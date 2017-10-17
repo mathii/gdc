@@ -3,8 +3,10 @@
 #Replaces everything in the orginal fasta with Ns if it is below the integer level specified
 
 from __future__ import division, print_function
-import argparse, gdc, pdb, sys
+import argparse, sys
 from pyfaidx import Fasta
+ 
+WRAP_LENGTH=50
  
 ################################################################################
 
@@ -44,9 +46,9 @@ def main(options):
         faseq=fa[chrom][:].seq
         maskseq=mask[chrom][:].seq
         new_seq="".join([x if y.isdigit() and int(y)>=options.level else "N" for x,y in zip(faseq,maskseq)])
-        print("Printing chromosome "+chrom, file=sys.stderr)
+        wrap_seq="\n".join(new_seq[i:i+WRAP_LENGTH] for i in range(0,len(new_seq), WRAP_LENGTH))
         print(">"+chrom)
-        print(textwrap.fill(new_seq,50))
+        print(wrap_seq)
         
     
 ################################################################################
