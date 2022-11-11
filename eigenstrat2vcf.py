@@ -51,7 +51,7 @@ def main(options):
     print("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t"+"\t".join(data.ind["IND"]))
 
     #Now line by line write data
-    for i,d in enumerate(data):
+    for i,d in enumerate(data.geno()):
         this_snp=data.snp[i]
         line="\t".join([this_snp["CHR"], str(this_snp["POS"]), this_snp["ID"], 
                          this_snp["REF"], this_snp["ALT"], "100", "PASS", ".", "GT" ])
